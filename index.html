@@ -1,0 +1,88 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #9ca3af; /* gray-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-md mx-4">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">My To-Do List</h1>
+
+        <!-- Input Form -->
+        <form id="task-form" class="flex items-center gap-3 mb-6">
+            <input
+                type="text"
+                id="task-input"
+                placeholder="Add a new task..."
+                class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                required
+            >
+            <button
+                type="submit"
+                class="bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
+            >
+                Add
+            </button>
+        </form>
+
+        <!-- Task List -->
+        <ul id="task-list" class="space-y-3">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskForm = document.getElementById('task-form');
+            const taskInput = document.getElementById('task-input');
+            const taskList = document.getElementById('task-list');
+
+            // Function to create a new task item
+            function createTask(taskText) {
+                const li = document.createElement('li');
+                li.className = 'task-item flex items-center justify-between bg-gray-50 p-4 rounded-lg shadow-sm';
+
+                const span = document.createElement('span');
+                span.textContent = taskText;
+                span.className = 'flex-grow cursor-pointer';
+                span.addEventListener('click', () => {
+                    li.classList.toggle('completed');
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'text-red-500 hover:text-red-700 font-semibold ml-4';
+                deleteButton.addEventListener('click', () => {
+                    taskList.removeChild(li);
+                });
+
+                li.appendChild(span);
+                li.appendChild(deleteButton);
+                taskList.appendChild(li);
+            }
+
+            // Handle form submission
+            taskForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const taskText = taskInput.value.trim();
+                if (taskText) {
+                    createTask(taskText);
+                    taskInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
